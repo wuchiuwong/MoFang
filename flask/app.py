@@ -18,6 +18,10 @@ app = Flask(__name__)
 def mainPage():
     return render_template('mofang.html')
 
+@app.route('/test')
+def mofang3D():
+    return render_template('mofang3D.html')
+
 
 @app.route('/initState', methods=['POST'])
 def initState():
