@@ -2,14 +2,16 @@ from flask import Flask, request
 from flask import render_template
 from flask import jsonify
 import json
+import os
+import sys
+import numpy as np
+o_path = os.getcwd()
+sys.path.append(o_path)
+sys.path.append('../')
+from scripts import nnetSolve
+
 
 app = Flask(__name__)
-
-FEToState = [6, 3, 0, 7, 4, 1, 8, 5, 2, 15, 12, 9, 16, 13, 10, 17, 14, 11, 24, 21, 18, 25, 22, 19, 26, 23, 20, 33,
-             30, 27, 34,
-             31, 28, 35, 32, 29, 38, 41, 44, 37, 40, 43, 36, 39, 42, 51, 48, 45, 52, 49, 46, 53, 50, 47]
-stateToFE = [2, 5, 8, 1, 4, 7, 0, 3, 6, 11, 14, 17, 10, 13, 16, 9, 12, 15, 20, 23, 26, 19, 22, 25, 18, 21, 24, 29,
-             32, 35, 28, 31, 34, 27, 30, 33, 42, 39, 36, 43, 40, 37, 44, 41, 38, 47, 50, 53, 46, 49, 52, 45, 48, 51]
 
 
 @app.route('/')
@@ -19,6 +21,9 @@ def mainPage():
 
 @app.route('/initState', methods=['POST'])
 def initState():
+    FEToState = [6, 3, 0, 7, 4, 1, 8, 5, 2, 15, 12, 9, 16, 13, 10, 17, 14, 11, 24, 21, 18, 25, 22, 19, 26, 23, 20, 33,
+                 30, 27, 34,
+                 31, 28, 35, 32, 29, 38, 41, 44, 37, 40, 43, 36, 39, 42, 51, 48, 45, 52, 49, 46, 53, 50, 47]
     legalMoves = ["U_-1", "U_1", "D_-1", "D_1", "L_-1", "L_1", "R_-1", "R_1", "B_-1", "B_1", "F_-1", "F_1"]
     rotateIdxs_new = {
         "B_-1": [36, 37, 38, 38, 41, 44, 44, 43, 42, 42, 39, 36, 2, 5, 8, 35, 34, 33, 15, 12, 9, 18, 19, 20],
@@ -48,6 +53,8 @@ def initState():
         "U_1": [6, 3, 0, 0, 1, 2, 2, 5, 8, 8, 7, 6, 47, 50, 53, 29, 32, 35, 38, 41, 44, 20, 23, 26]}
     state = [2, 5, 8, 1, 4, 7, 0, 3, 6, 11, 14, 17, 10, 13, 16, 9, 12, 15, 20, 23, 26, 19, 22, 25, 18, 21, 24, 29, 32,
              35, 28, 31, 34, 27, 30, 33, 42, 39, 36, 43, 40, 37, 44, 41, 38, 47, 50, 53, 46, 49, 52, 45, 48, 51]
+    stateToFE = [2, 5, 8, 1, 4, 7, 0, 3, 6, 11, 14, 17, 10, 13, 16, 9, 12, 15, 20, 23, 26, 19, 22, 25, 18, 21, 24, 29,
+                 32, 35, 28, 31, 34, 27, 30, 33, 42, 39, 36, 43, 40, 37, 44, 41, 38, 47, 50, 53, 46, 49, 52, 45, 48, 51]
     data = {'FEToState': FEToState, 'legalMoves': legalMoves, 'rotateIdxs_new': rotateIdxs_new,
             'rotateIdxs_old': rotateIdxs_old, 'state': state, 'stateToFE': stateToFE}
     return jsonify(data)
@@ -55,21 +62,27 @@ def initState():
 
 @app.route('/solve', methods=['POST'])
 def solve():
+    FEToState = [6, 3, 0, 7, 4, 1, 8, 5, 2, 15, 12, 9, 16, 13, 10, 17, 14, 11, 24, 21, 18, 25, 22, 19, 26, 23, 20, 33,
+                 30, 27, 34,
+                 31, 28, 35, 32, 29, 38, 41, 44, 37, 40, 43, 36, 39, 42, 51, 48, 45, 52, 49, 46, 53, 50, 47]
     # data = request.get_data()
     # print(data)
     stateUnicode = request.form.get('state')
+    print(stateUnicode)
     stateStr = stateUnicode.encode('utf-8')
     # print(type(stateStr))
     stateStr = stateStr.replace("[", "")
     stateStr = stateStr.replace("]", "")
     # print(stateStr)
     stateSpilt = stateStr.split(",")
-    state = []
+    stateArray = []
     for stickers in stateSpilt:
-        state.append(int(stickers))
-    print(state)
-
-    soln = []
+        stateArray.append(int(stickers))
+    print(stateArray)
+    print(len(stateArray))
+    stateArray2 = reOrderArray(stateArray, FEToState)
+    state = np.array(stateArray2)
+    soln = nnetSolve.solve(state)
     # moves = ["U_-1", "R_1", "B_1", "F_1", "U_1", "U_1", "F_1", "U_-1", "B_1", "D_1", "U_-1", "B_-1", "U_1", "L_1",
     #          "D_1", "L_-1", "U_-1", "F_-1", "R_1", "D_1", "D_1", "R_-1", "U_-1", "R_1", "D_-1"]
     moves = []
@@ -87,7 +100,16 @@ def solve():
     data = {'moves': moves, 'moves_rev': moves_rev, 'solve_text': solve_text}
     return jsonify(data)
 
-def reOrderArray(arr,indecies):
+
+@app.route('/a', methods=['GET'])
+def test():
+    stateArray = [33, 16, 38, 3, 4, 41, 29, 10, 24, 51, 1, 18, 34, 13, 12, 2, 52, 26, 36, 50, 6, 32, 22, 14, 44, 37, 27, 45, 5, 8, 43, 31, 25, 42, 39, 0, 20, 28, 47, 7, 40, 46, 15, 30, 35, 53, 21, 11, 48, 49, 19, 17, 23, 9]
+    state = np.array(stateArray)
+    res = nnetSolve.solve(state)
+    return "a"
+
+
+def reOrderArray(arr, indecies):
     temp = []
     for i in range(len(indecies)):
         index = indecies[i]
