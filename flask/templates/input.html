@@ -9,32 +9,35 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/assets/images/favicon.png">
     <title>软件工程带作业</title>
     <!-- Bootstrap Core CSS -->
-    <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- This page CSS -->
     <!-- chartist CSS -->
-    <link href="../assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
-    <link href="../assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="static/assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="static/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
     <!--c3 CSS -->
-    <link href="../assets/plugins/c3-master/c3.min.css" rel="stylesheet">
+    <link href="static/assets/plugins/c3-master/c3.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="../static/css/style.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
     <!-- Dashboard 1 Page CSS -->
-    <link href="../static/css/pages/dashboard.css" rel="stylesheet">
+    <link href="static/css/pages/dashboard.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="../static/css/colors/default-dark.css" id="theme" rel="stylesheet">
+    <link href="static/css/colors/default-dark.css" id="theme" rel="stylesheet">
 
+    <!-- Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet"
+      href="static/main.css">
 
-
-   	<link rel="stylesheet" type="text/css" href="../static/styles/cube.css">
-	<link rel="stylesheet" type="text/css" href="../static/styles/doodle2.css">
-	<link rel="stylesheet" type="text/css" href="../static/styles/certificate2.css">
+   	<link rel="stylesheet" type="text/css" href="static/styles/cube.css">
+	<link rel="stylesheet" type="text/css" href="static/styles/doodle2.css">
+	<link rel="stylesheet" type="text/css" href="static/styles/certificate2.css">
 	<!-- compiled & minified cube code -->
-	<script charset="utf-8" src="../static/scripts/tween.r12.js"></script>
-	<script charset="utf-8" src="../static/scripts/three.js"></script>
-	<script charset="utf-8" src="../static/scripts/cuber.min.js"></script>
+	<script charset="utf-8" src="static/scripts/tween.r12.js"></script>
+	<script charset="utf-8" src="static/scripts/three.js"></script>
+	<script charset="utf-8" src="static/scripts/cuber.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -118,13 +121,11 @@
                         <h3 class="text-themecolor">爷是魔方带师，爷来教你玩魔方</h3>
                     </div>
                     <div class="col-md-1 align-self-center">
-                        <a href="#" class="btn waves-effect waves-light btn-success pull-right hidden-sm-down"> 调色板打乱</a>
-                    </div>
-                    <div class="col-md-1 align-self-center">
-                        <a href="#" class="btn waves-effect waves-light btn-danger pull-right hidden-sm-down"> 随机地打乱</a>
-                    </div>
-                    <div class="col-md-1 align-self-center">
-                        <a href="#" class="btn waves-effect waves-light btn-info pull-right hidden-sm-down"> 带师教我解</a>
+                        <a href="#" class="btn waves-effect waves-light btn-info pull-right hidden-sm-down" id="newSolve"> 带师教我解</a>
+			<div id="button_container" class="container" style="display:none">
+				<button disabled id="scramble" type="button">点这个打乱</button>
+				<button disabled id="solve" type="button">带师教我解</button>
+			</div>
                     </div>
                 </div>
                 <!-- ============================================================== -->
@@ -134,32 +135,34 @@
                 <!-- Sales overview chart -->
                 <!-- ============================================================== -->
                 <div class="row">
-                    <div class="col-lg-7 col-md-12">
+                    <div class="col-lg-6 col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div>
                                         <h4 class="card-title m-b-5"><span class="lstick"></span>魔方</h4>
                                     </div>
+								
                                     <div id="cube_div" class="container" style="padding: 60px">
 										<section class="cube_container">
-										<div id="cube">
-										<figure id="front" class="front">
-										</figure>
-										<figure id="back" class="back">
-										</figure>
-										<figure id="right" class="right">
-										</figure>
-										<figure id="left" class="left">
-										</figure>
-										<figure id="top" class="top">
-										</figure>
-										<figure id="bottom" class="bottom">
-										</figure>
-										</div>
+											<div id="cube">
+												<figure id="front" class="front">
+												</figure>
+												<figure id="back" class="back">
+												</figure>
+												<figure id="right" class="right">
+												</figure>
+												<figure id="left" class="left">
+												</figure>
+												<figure id="top" class="top">
+												</figure>
+												<figure id="bottom" class="bottom">
+												</figure>
+											</div>
 										</section>
 									</div>
 
+			
                                 </div>
                                 <!-- <div id="sales-overview2" class="p-relative" style="height:360px;"></div> -->
                             </div>
@@ -168,37 +171,20 @@
                     <!-- ============================================================== -->
                     <!-- result charts-->
                     <!-- ============================================================== -->
-                    <div class="col-lg-5 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title"><span class="lstick"></span>康康你的成绩</h4>
-                                <div id="visitor" style="height:250px; width:100%;"></div>
-                                <table class="table vm font-14">
-                                    <tr>
-                                        <td class="b-0">还原时间</td>
-                                        <td class="text-right font-medium b-0">200s</td>
-                                    </tr>
-                                    <tr>
-                                        <td>标准时间</td>
-                                        <td class="text-right font-medium">150s</td>
-                                    </tr>
-                                    <tr>
-                                        <td>标准步骤</td>
-                                        <td class="text-right font-medium">DRLBFLRU</td>
-                                    </tr>
-                                    <tr>
-                                        <td>你的步骤</td>
-                                        <td class="text-right font-medium">DRLBFLRU</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-lg-7 col-md-12">
+
+                    <div class="col-lg-6 col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title"><span class="lstick"></span>调色盘</h4>
+									<div id="solution_container" class="container">
+										<button disabled id="first_state" type="button">&#060;&#060;</button>
+										<button disabled id="prev_state" type="button">&#060;</button>
+										<button disabled id="next_state" type="button">&#062;</button>
+										<button disabled id="last_state" type="button">&#062;&#062;</button>
+										<h4 id="solution_text">铁憨憨你照做便是了：</h4>
+									</div>
+								</div>
                                 <div class="col-md-9 align-self-center">
 			                         <button id="redButton" class="btn hidden-sm-down text-white" style="background-color: red" onclick="colorSelect(this)"> 红色</button>
 			                         <button id="yellowButton" class="btn hidden-sm-down text-black" style="background-color: yellow" onclick="colorSelect(this)"> 黄色</button>
@@ -346,97 +332,47 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="../assets/plugins/jquery/jquery.min.js"></script>
+    <script src="static/assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap popper Core JavaScript -->
-    <script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
-    <script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="../static/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="static/js/perfect-scrollbar.jquery.min.js"></script>
     <!--Wave Effects -->
-    <script src="../static/js/waves.js"></script>
+    <script src="static/js/waves.js"></script>
     <!--Menu sidebar -->
-    <script src="../static/js/sidebarmenu.js"></script>
+    <script src="static/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
-    <script src="../static/js/custom.min.js"></script>
+    <script src="static/js/custom.min.js"></script>
     <!-- ============================================================== -->
     <!-- This page plugins -->
     <!-- ============================================================== -->
-    <script src="../assets/plugins/chartist-js/dist/chartist.min.js"></script>
-    <script src="../assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="static/assets/plugins/chartist-js/dist/chartist.min.js"></script>
+    <script src="static/assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
     <!--c3 JavaScript -->
-    <script src="../assets/plugins/d3/d3.min.js"></script>
-    <script src="../assets/plugins/c3-master/c3.min.js"></script>
+    <script src="static/assets/plugins/d3/d3.min.js"></script>
+    <script src="static/assets/plugins/c3-master/c3.min.js"></script>
     <!-- Chart JS -->
-    <script src="../static/js/dashboard.js"></script>
+    <script src="static/js/dashboard.js"></script>
 
 
 
-    <script charset="utf-8" src="../static/scripts/iecss3d.js"></script>
-	<script charset="utf-8" src="../static/scripts/ierenderer.js"></script>
-	<script charset="utf-8" src="../static/scripts/deviceMotion.js"></script>
-	<script charset="utf-8" src="../static/scripts/locked.js"></script>
+    <script charset="utf-8" src="static/scripts/iecss3d.js"></script>
+	<script charset="utf-8" src="static/scripts/ierenderer.js"></script>
+	<script charset="utf-8" src="static/scripts/deviceMotion.js"></script>
+	<script charset="utf-8" src="static/scripts/locked.js"></script>
 	<!-- Certificate js -->
-	<script charset="utf-8" src="../static/scripts/textBox.js"></script>
-	<script charset="utf-8" src="../static/scripts/ResizeableTextBox.3.js"></script>
-	<script charset="utf-8" src="../static/scripts/divBox.js"></script>
-	<script charset="utf-8" src="../static/scripts/frames.js"></script>
-	<script charset="utf-8" src="../static/scripts/certificate.js"></script>
-	<script charset="utf-8" src="../static/scripts/main3.js"></script>
+	<script charset="utf-8" src="static/scripts/textBox.js"></script>
+	<script charset="utf-8" src="static/scripts/ResizeableTextBox.3.js"></script>
+	<script charset="utf-8" src="static/scripts/divBox.js"></script>
+	<script charset="utf-8" src="static/scripts/frames.js"></script>
+	<script charset="utf-8" src="static/scripts/certificate.js"></script>
 
-	<script type="text/javascript">
-		var colors=[0,0,0,0,0,0];
-		var data=["red","yellow","orange","green","white","blue"];
-		var buttonColor=""
-
-		function colorSelect(ele){
-			buttonColor=ele.id;
-			// console.log(buttonColor)
-			colors=[0,0,0,0,0,0];
-			switch(buttonColor){
-				case "redButton":
-					colors[0]=1; 
-					break;
-				case "yellowButton": 
-					colors[1]=1;
-					break;
-				case "orangeButton": 
-					colors[2]=1;
-					break;
-				case "greenButton": 
-					colors[3]=1;
-					break;
-				case "whiteButton": 
-					colors[4]=1;
-					break;
-				case "blueButton": 
-					colors[5]=1;
-					break;
-				case "cancelButton":
-					colors=[0,0,0,0,0,0];
-					break;
-			}
-			console.log(colors);
-			var indexSet=-1;
-			indexSet=colors.indexOf(1);
-			if (indexSet >=0 ){
-				$("#colorNow").text(data[indexSet])
-			}
-			else{$("#colorNow").text("未设定")}
-		}
-
-		function colorSet(ele){
-			alert(ele.id);
-			var indexSet=-1;
-			indexSet=colors.indexOf(1);
-			if (indexSet >=0 ){
-				var colorValue=data[indexSet];
-				console.log(colorValue);
-				console.log(ele.style.backgroundColor);
-				ele.style.backgroundColor=colorValue;
-				console.log(ele.style.backgroundColor);
-			}
-		}
-	</script>
+	<script src="static/googleapiscomajax.js"></script>
+	<!--script src="/static/jquery.min.js"></script-->
+	<script src="static/mainVer3.js"></script>
+	
+	
 </body>
 
 </html>
