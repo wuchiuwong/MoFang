@@ -144,6 +144,10 @@ def solveByInput():
         # stateArray.append(int(stickers))
         colorArray.append(int(stickers) // 9)
     stateArray = color2Status(colorArray)
+    if stateArray == False:
+        print("error")
+        data = {'moves': [], 'moves_rev': [], 'solve_text': [], 'state': [], 'error': 1}
+        return data
     stateArray2 = reOrderArray(stateArray, FEToState)
     state = np.array(stateArray2)
     soln = nnetSolve.solve(state)
@@ -161,7 +165,7 @@ def solveByInput():
             moves.append(step[0] + "_1")
             moves_rev.append(step[0] + "_-1")
             solve_text.append(step[0])
-    data = {'moves': moves, 'moves_rev': moves_rev, 'solve_text': solve_text, 'state': stateArray}
+    data = {'moves': moves, 'moves_rev': moves_rev, 'solve_text': solve_text, 'state': stateArray, 'error': 0}
     return jsonify(data)
 
 
@@ -191,11 +195,16 @@ def color2Status(color):
             hIdx = edge[1]
             lIdx = edge[0]
         edgeIdx = 10 * lColor + hColor
-        edgeStatus = edgesSet[edgeIdx]
+        if edgeIdx in edgesSet.keys():
+            edgeStatus = edgesSet[edgeIdx]
+        else:
+            print("not in leng")
+            return False
         status[lIdx] = edgeStatus[0]
         status[hIdx] = edgeStatus[1]
     for angle in angles:
         angleColor = [color[angle[0]], color[angle[1]], color[angle[2]]]
+        # sortColor = angleColor.copy()
         sortColor = []
         for i in angleColor:
             sortColor.append(i)
@@ -208,9 +217,17 @@ def color2Status(color):
                 if angleColor[j] == sortColor[i]:
                     idxArr.append(angle[j])
                     break
-        angleStatus = anglesSet[angleIdx]
+        if angleIdx in anglesSet.keys():
+            angleStatus = anglesSet[angleIdx]
+        else:
+            print("not in jiao")
+            return False
         for i in range(3):
             status[idxArr[i]] = angleStatus[i]
+    print(status)
+    for checkStickers in range(0, 54):
+        if checkStickers not in status:
+            return False
     return status
 
 

@@ -247,17 +247,22 @@ function solveCubeByInput() {
 		dataType: 'json',
 		success: function(response) {
 			// alert("solve");
-			state = response["state"];
-			solveStartState = JSON.parse(JSON.stringify(state))
-			solveMoves = response["moves"];
-			solveMoves_rev = response["moves_rev"];
-			solution_text = response["solve_text"];
-			solution_text.push("完成!")
-			setSolnText(true);
+			if (response["error"] == 0 || response["error"] == "0")
+			{
+				state = response["state"];
+				solveStartState = JSON.parse(JSON.stringify(state))
+				solveMoves = response["moves"];
+				solveMoves_rev = response["moves_rev"];
+				solution_text = response["solve_text"];
+				solution_text.push("完成!")
+				setSolnText(true);
 
-			moves = JSON.parse(JSON.stringify(solveMoves))
+				moves = JSON.parse(JSON.stringify(solveMoves))
 
-			setTimeout(function(){nextState(500)}, 500);
+				setTimeout(function(){nextState(500)}, 500);
+			} else {
+				document.getElementById("solution_text").innerHTML = "输入状态有错，请检查输入！";
+			}
 		},
 		error: function(error) {
 				console.log(error);
