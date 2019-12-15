@@ -118,7 +118,7 @@ function clearSoln() {
 	solveMoves = [];
 	solveMoves_rev = [];
 	solution_text = null;
-	document.getElementById("solution_text").innerHTML = "Solution:";
+	document.getElementById("solution_text").innerHTML = "公式:";
 	disableScroll();
 }
 
@@ -131,7 +131,7 @@ function setSolnText(setColor=true) {
 			solution_text_mod[solveIdx] = solution_text_mod[solveIdx]
 		}
 	}
-	document.getElementById("solution_text").innerHTML = "Solution: "+ solution_text_mod.join(" ");
+	document.getElementById("solution_text").innerHTML = "公式: "+ solution_text_mod.join(" ");
 }
 
 function enableInput() {
@@ -207,7 +207,7 @@ function scrambleCube() {
 function solveCube() {
 	// disableInput();
 	clearSoln();
-	document.getElementById("solution_text").innerHTML = "SOLVING..."
+	document.getElementById("solution_text").innerHTML = "正在求解..."
 	alert(JSON.stringify(state));
 	$.ajax({
 		url: '/solve',
@@ -219,7 +219,7 @@ function solveCube() {
 			solveMoves = response["moves"];
 			solveMoves_rev = response["moves_rev"];
 			solution_text = response["solve_text"];
-			solution_text.push("SOLVED!")
+			solution_text.push("完成!")
 			setSolnText(true);
 
 			moves = JSON.parse(JSON.stringify(solveMoves))
@@ -228,7 +228,7 @@ function solveCube() {
 		},
 		error: function(error) {
 				console.log(error);
-				document.getElementById("solution_text").innerHTML = "..."
+				document.getElementById("solution_text").innerHTML = "网络不太好..."
 				setTimeout(function(){solveCube()}, 500);
 		},
 	});
@@ -238,7 +238,7 @@ function solveCubeByInput() {
 	// disableInput();
 	clearSoln();
 	// alert(1);
-	document.getElementById("solution_text").innerHTML = "SOLVING..."
+	document.getElementById("solution_text").innerHTML = "正在求解..."
 	// alert(JSON.stringify(state));
 	$.ajax({
 		url: '/solvebyinput',
@@ -252,7 +252,7 @@ function solveCubeByInput() {
 			solveMoves = response["moves"];
 			solveMoves_rev = response["moves_rev"];
 			solution_text = response["solve_text"];
-			solution_text.push("SOLVED!")
+			solution_text.push("完成!")
 			setSolnText(true);
 
 			moves = JSON.parse(JSON.stringify(solveMoves))
@@ -261,7 +261,7 @@ function solveCubeByInput() {
 		},
 		error: function(error) {
 				console.log(error);
-				document.getElementById("solution_text").innerHTML = "..."
+				document.getElementById("solution_text").innerHTML = "网络不太好..."
 				setTimeout(function(){solveCube()}, 500);
 		},
 	});

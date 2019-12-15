@@ -96,7 +96,7 @@ function clearSoln() {
 	solveMoves = [];
 	solveMoves_rev = [];
 	solution_text = null;
-	document.getElementById("solution_text").innerHTML = "Solution:";
+	document.getElementById("solution_text").innerHTML = "公式:";
 	disableScroll();
 }
 
@@ -109,7 +109,7 @@ function setSolnText(setColor=true) {
 			solution_text_mod[solveIdx] = solution_text_mod[solveIdx]
 		}
 	}
-	document.getElementById("solution_text").innerHTML = "Solution: "+ solution_text_mod.join(" ");
+	document.getElementById("solution_text").innerHTML = "公式: "+ solution_text_mod.join(" ");
 }
 
 function enableInput() {
@@ -140,7 +140,7 @@ function nextState(moveTimeout=0) {
 		}
 
 		// Change move highlight
-		if (moveTimeout != 0){ //check if nextState is used for first_state click, prev_state,etc.
+		if (moveTimeout > 490){ //check if nextState is used for first_state click, prev_state,etc.
 				solveIdx++
 				setSolnText(setColor=true)
 		}
@@ -184,7 +184,7 @@ function nextStateWithTwist(moveTimeout=0) {
 		}
 
 		// Change move highlight
-		if (moveTimeout != 0){ //check if nextState is used for first_state click, prev_state,etc.
+		if (moveTimeout >490){ //check if nextState is used for first_state click, prev_state,etc.
 				solveIdx++
 				setSolnText(setColor=true)
 		}
@@ -242,7 +242,7 @@ function solveCube() {
 			solveMoves = response["moves"];
 			solveMoves_rev = response["moves_rev"];
 			solution_text = response["solve_text"];
-			solution_text.push("SOLVED!")
+			solution_text.push("完成!")
 			setSolnText(true);
 
 			moves = JSON.parse(JSON.stringify(solveMoves))
@@ -309,12 +309,10 @@ $( document ).ready($(function() {
 	$("#cube").css("transform", "translateZ( -100px) rotateX( " + rotX + "deg) rotateY(" + rotY + "deg)"); //Initial orientation	
 
 	$('#scramble').click(function() {
-		alert("1");
 		scrambleCubeByButton();
 	});
 
 	$('#solve').click(function() {
-		alert("2");
 		solveCube()
 	});
 
@@ -332,7 +330,7 @@ $( document ).ready($(function() {
 			solveIdx = solveIdx - 1;
 			moves.push(solveMoves_rev[solveIdx]);
 			doTwistByMove(moves, 500);
-			nextState(500);
+			nextState(490);
 		}
 	});
 
@@ -341,7 +339,7 @@ $( document ).ready($(function() {
 			moves.push(solveMoves[solveIdx]);
 			solveIdx = solveIdx + 1;
 			doTwistByMove(moves, 500);
-			nextState(500);
+			nextState(490);
 		}
 	});
 
