@@ -59,7 +59,7 @@ anglesSet = {24: [2, 20, 44], 25: [0, 26, 47], 34: [8, 35, 38], 35: [6, 29, 53],
 
 @app.route('/')
 def mainPage():
-    return render_template('mofang.html')
+    return render_template('newIndex.html')
 
 
 @app.route('/test')
@@ -67,7 +67,7 @@ def mofang3D():
     return render_template('mofang3D.html')
 
 
-@app.route('/test2')
+@app.route('/input')
 def mofangInput():
     return render_template('input.html')
 
